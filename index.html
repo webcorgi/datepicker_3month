@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            var selectedDates = ["2023-10-25", "", ""]; // 손 없는 날/금-토요일은 가격이 비쌀수 있어요.
+
+            function createCalendar(year, month, index) {
+                var monthNames = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
+                var monthName = monthNames[month - 1];
+
+                var container = $("<div class='calendar'></div>").appendTo("#calendar-container");
+
+                var maxDate = new Date();
+                maxDate.setDate(maxDate.getDate() + 56);
+
+                container.datepicker({
+                    inline: true,
+                    minDate: 0,
+                    maxDate: maxDate,
+                    beforeShowDay: highlightSpecificDate,
+                    onSelect: function (dateText) {
+                        selectedDates[index] = dateText;
+                        updateSelectedDates();
+                    },
+                    dayNamesMin: ["일", "월", "화", "수", "목", "금", "토"],
+                });
+
+                container.datepicker("setDate", new Date(year, month - 1, 1));
+
+                container.prepend("<h2>" + year + "년 " + monthName + "</h2");
+
+                container.find(".ui-datepicker-next, .ui-datepicker-prev").remove();
+
+                function highlightSpecificDate(date) {
+                    var today = new Date();
+                    var formattedDate = $.datepicker.formatDate('yy-mm-dd', date);
+
+                    if (formattedDate === selectedDates[index]) {
+                        return [true, 'selected', ''];
+                    } else if (date.getTime() === today.getTime()) {
+                        return [true, 'today', ''];
+                    } else {
+                        return [true, '', ''];
+                    }
+                }
+            }
+
+            function updateSelectedDates() {
+                $(".calendar").each(function (index) {
+                    if (selectedDates[index] === "") {
+                        $(this).find(".selected").removeClass("selected");
+                    } else {
+                        $(this).find(".ui-state-active").removeClass("ui-state-active");
+                    }
+                });
+            }
+
+            createCalendar(2023, 10, 0);
+            createCalendar(2023, 11, 1);
+            createCalendar(2023, 12, 2);
+        });
+
+    </script>
+    <style>
+        .selected a {
+            background-color: #007fff;
+            color: #ffffff;
+        }
+
+        /* Style for calendar container */
+        .calendar {
+            display: block;
+            margin: 10px;
+            padding: 10px;
+            background-color: none;
+        }
+
+        .ui-datepicker-header {
+            display: none !important;
+        }
+
+        .ui-widget.ui-widget-content {
+            border: 0;
+        }
+
+        td.selected {
+            position: relative;
+        }
+
+        td.selected:before {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ed1c24;
+            position: absolute;
+            right: 15px;
+            top: 2px;
+        }
+
+        #calendar-container h2 {
+            font-size: 20px;
+        }
+
+        .ui-datepicker-calendar thead tr:first-child {
+            border-top: 1px solid #d4d4d4;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+        .ui-state-default,
+        .ui-widget-content .ui-state-default {
+            text-align: center;
+            background: none;
+            border: 0;
+            padding: 10px 0;
+        }
+
+        .ui-state-active,
+        .ui-widget-content .ui-state-active {
+            background: #5e6eff;
+            color: #fff;
+            border-radius: 50%;
+        }
+
+        .ui-datepicker table {
+            font-size: 20px;
+        }
+
+        .ui-widget.ui-widget-content {
+            width: 500px;
+        }
+
+        .ui-state-default,
+        .ui-widget-content .ui-state-default {
+            width: 43px !important;
+            margin: 0 auto;
+        }
+
+        .ui-datepicker th {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="calendar-container"></div>
+
+</body>
+
+</html>
