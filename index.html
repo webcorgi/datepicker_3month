@@ -7,7 +7,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         $(function () {
-            var selectedDates = ["2023-10-25", "", ""]; // 손 없는 날/금-토요일은 가격이 비쌀수 있어요.
+            var selectedDates = ["2023-10-25", "2023-11-22", ""]; // 손 없는 날/금-토요일은 가격이 비쌀수 있어요.
 
             function createCalendar(year, month, index) {
                 var monthNames = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
@@ -24,7 +24,11 @@
                     maxDate: maxDate,
                     beforeShowDay: highlightSpecificDate,
                     onSelect: function (dateText) {
-                        selectedDates[index] = dateText;
+                        // selectedDates[index] = dateText;
+                        setTimeout(() => {
+                            $('.ui-state-default').css({ background: '#fff', color: "#333" })
+                            $('.ui-state-default.ui-state-active').css({ background: '#5e6eff', color: '#fff' })
+                        }, 100)
                         updateSelectedDates();
                     },
                     dayNamesMin: ["일", "월", "화", "수", "목", "금", "토"],
@@ -32,7 +36,7 @@
 
                 container.datepicker("setDate", new Date(year, month - 1, 1));
 
-                container.prepend("<h2>" + year + "년 " + monthName + "</h2");
+                container.prepend("<h2>" + year + "년 " + monthName + "</h2>");
 
                 container.find(".ui-datepicker-next, .ui-datepicker-prev").remove();
 
@@ -67,32 +71,31 @@
 
     </script>
     <style>
-        .selected a {
+        #calendar-container .selected a {
             background-color: #007fff;
-            color: #ffffff;
         }
 
         /* Style for calendar container */
-        .calendar {
+        #calendar-container .calendar {
             display: block;
             margin: 10px;
             padding: 10px;
             background-color: none;
         }
 
-        .ui-datepicker-header {
+        #calendar-container .ui-datepicker-header {
             display: none !important;
         }
 
-        .ui-widget.ui-widget-content {
+        #calendar-container .ui-widget.ui-widget-content {
             border: 0;
         }
 
-        td.selected {
+        #calendar-container td.selected {
             position: relative;
         }
 
-        td.selected:before {
+        #calendar-container td.selected:before {
             content: '';
             display: block;
             width: 8px;
@@ -108,42 +111,57 @@
             font-size: 20px;
         }
 
-        .ui-datepicker-calendar thead tr:first-child {
+        #calendar-container .ui-datepicker-calendar thead tr:first-child {
             border-top: 1px solid #d4d4d4;
             border-bottom: 1px solid #d4d4d4;
         }
 
-        .ui-state-default,
-        .ui-widget-content .ui-state-default {
+        #calendar-container .ui-state-default,
+        #calendar-container .ui-widget-content .ui-state-default {
             text-align: center;
             background: none;
             border: 0;
             padding: 10px 0;
         }
 
-        .ui-state-active,
-        .ui-widget-content .ui-state-active {
+        #calendar-container .ui-state-active,
+        #calendar-container .ui-widget-content .ui-state-active {
             background: #5e6eff;
             color: #fff;
             border-radius: 50%;
         }
 
-        .ui-datepicker table {
+        #calendar-container .ui-datepicker table {
             font-size: 20px;
         }
 
-        .ui-widget.ui-widget-content {
+        #calendar-container .ui-widget.ui-widget-content {
             width: 500px;
         }
 
-        .ui-state-default,
-        .ui-widget-content .ui-state-default {
+        #calendar-container .ui-state-default,
+        #calendar-container .ui-widget-content .ui-state-default {
             width: 43px !important;
             margin: 0 auto;
         }
 
-        .ui-datepicker th {
+        #calendar-container .ui-datepicker th {
             padding: 10px;
+        }
+
+
+        #calendar-container .ui-state-active,
+        #calendar-container .ui-widget-content .ui-state-active {
+            /* background: #5e6eff; */
+            /* color: #fff; */
+            /*  */
+            background: none;
+            color: #000;
+        }
+
+        .ui-state-default {
+            background: none;
+            color: #333;
         }
     </style>
 </head>
